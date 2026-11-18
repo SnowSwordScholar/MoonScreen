@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="256" viewBox="0 0 512 256"
+     role="img" aria-label="MoonScreen">
+  <title>MoonScreen</title>
+  <defs>
+    <!-- deep indigo tile: reads correctly on both light and dark Home Assistant themes -->
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#182050"/>
+      <stop offset="1" stop-color="#070A18"/>
+    </linearGradient>
+    <radialGradient id="sheen" cx="0.5" cy="0.04" r="0.95">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#5FC8FF" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#5FC8FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="spill" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#8FD8FF" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#8FD8FF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bezel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6FE3FF"/>
+      <stop offset="1" stop-color="#B49BFF"/>
+    </linearGradient>
+    <linearGradient id="stand" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#45B6EA"/>
+      <stop offset="1" stop-color="#8C7FE6"/>
+    </linearGradient>
+    <linearGradient id="moon" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#A8F1FF"/>
+      <stop offset="1" stop-color="#CDB9FF"/>
+    </linearGradient>
+    <radialGradient id="screenglow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#7ED8FF" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#7ED8FF" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="screenClip">
+      <rect x="118" y="42" width="276" height="134" rx="11"/>
+    </clipPath>
+  </defs>
+
+  <!-- 1. tile -->
+  <rect width="512" height="256" rx="52" fill="url(#bg)"/>
+  <rect width="512" height="256" rx="52" fill="url(#sheen)"/>
+
+  <!-- ambient moonlight halo, keeps the wide tile from looking empty -->
+  <ellipse cx="256" cy="117.76" rx="204.8" ry="153.6"
+           fill="url(#halo)"/>
+  <ellipse cx="256" cy="234" rx="212.8" ry="21.76"
+           fill="url(#spill)"/>
+  <!-- 2. display: bezel -->
+  <rect x="106" y="30" width="300" height="158" rx="20"
+        fill="url(#bezel)"/>
+
+  <!-- 3. display: dark panel + subtle moonlight bloom -->
+  <rect x="118" y="42" width="276" height="134" rx="11"
+        fill="#0B1230"/>
+  <g clip-path="url(#screenClip)">
+    <ellipse cx="256" cy="109" rx="78"
+             ry="60.84" fill="url(#screenglow)"/>
+  </g>
+
+  <!-- 4. crescent moon (circle minus circle, single editable path) -->
+  <path d="M 245.472 58.077 A 52 52 0 1 0 294.528 143.923 A 52 52 0 0 1 245.472 58.077 Z" fill="url(#moon)"/>
+
+  <!-- 5. neck + foot -->
+  <polygon points="240,188 272,188 267,210 245,210" fill="url(#stand)"/>
+  <rect x="200" y="210" width="112" height="18"
+        rx="9" fill="url(#stand)"/>
+</svg>

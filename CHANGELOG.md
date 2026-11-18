@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.1 — 2026-11-18
+
+- Fix the switch staying at its setup value until the integration is reloaded:
+  the entity now extends `CoordinatorEntity` and subscribes to coordinator updates.
+- Build the mutual-TLS context in a worker thread, removing Home Assistant's
+  blocking-call warnings for `load_cert_chain` and the temporary PEM directory.
+- Add brand icons and point `manifest.json` metadata at this repository.
+
 ## 0.1.0
 
 - Initial MoonScreen integration.

@@ -12,6 +12,7 @@ import json
 import logging
 import secrets
 import xml.etree.ElementTree as ET
+from typing import Any
 
 import aiohttp
 
@@ -95,6 +96,18 @@ class SunshineClient:
         self._session: aiohttp.ClientSession | None = None
         self._web_session: aiohttp.ClientSession | None = None
         self._closed = False
+
+    @classmethod
+    async def async_create(cls, **kwargs: Any) -> SunshineClient:
+        """Create the client off the event loop.
+
+        ``ssl.SSLContext.load_cert_chain`` writes/reads temporary PEM files and
+        is a blocking call; HA's event-loop protector flags it when it runs on
+        the main thread.  The whole constructor is therefore executed in a
+        worker thread.
+        """
+
+        return await asyncio.to_thread(cls, **kwargs)
 
     # ------------------------------------------------------------------ sessions
 

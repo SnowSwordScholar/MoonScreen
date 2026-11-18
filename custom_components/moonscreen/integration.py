@@ -41,7 +41,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MoonScreenConfigEntry) -
 
     data = entry.data
     options = entry.options
-    client = SunshineClient(
+    client = await SunshineClient.async_create(
         host=data[CONF_HOST],
         https_port=int(data.get(CONF_HTTPS_PORT, 47984)),
         http_port=int(data.get(CONF_HTTP_PORT, 47989)),

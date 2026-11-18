@@ -316,7 +316,7 @@ class MoonScreenConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return f"https://{host}:{port}/pin"
 
     async def _finish_pairing(self, result: PairingResult) -> FlowResult:
-        client = SunshineClient(
+        client = await SunshineClient.async_create(
             host=str(self._user_input[CONF_HOST]),
             https_port=int(self._user_input[CONF_HTTPS_PORT]),
             http_port=int(self._user_input[CONF_HTTP_PORT]),

@@ -240,7 +240,12 @@ async def pair_with_pin(
     # Phase 5: the client certificate must now be accepted by the HTTPS
     # server.  This also validates that the pinned certificate is the one the
     # HTTPS listener actually uses.
-    context = create_mtls_context(server_cert_pem, client_cert_pem, client_key_pem)
+    context = await asyncio.to_thread(
+        create_mtls_context,
+        server_cert_pem,
+        client_cert_pem,
+        client_key_pem,
+    )
     https_timeout = aiohttp.ClientTimeout(total=30.0, sock_connect=10.0)
     try:
         async with aiohttp.ClientSession(

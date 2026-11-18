@@ -8,6 +8,7 @@ from homeassistant.components.switch import SwitchEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DEFAULT_ENTITY_NAME
 from .coordinator import MoonScreenCoordinator
@@ -25,15 +26,17 @@ async def async_setup_entry(
     async_add_entities([MoonScreenSwitch(coordinator, entry)])
 
 
-class MoonScreenSwitch(SwitchEntity):
+class MoonScreenSwitch(CoordinatorEntity[MoonScreenCoordinator], SwitchEntity):
     """Switch whose ON state means the physical screen is on."""
 
-    _attr_should_poll = False
     _attr_name = DEFAULT_ENTITY_NAME
     _attr_has_entity_name = False
 
     def __init__(self, coordinator: MoonScreenCoordinator, entry: ConfigEntry) -> None:
-        self.coordinator = coordinator
+        # CoordinatorEntity subscribes to coordinator updates and calls
+        # async_write_ha_state() on every poll; without it the HA state machine
+        # keeps the value from setup until the integration is reloaded.
+        super().__init__(coordinator)
         self._entry = entry
         self._attr_unique_id = f"{entry.entry_id}_screen"
         self._attr_device_info = build_device_info(entry)

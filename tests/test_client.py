@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import pytest
 from custom_components.moonscreen.moonlight.client import SunshineClient
+from custom_components.moonscreen.moonlight.crypto import generate_client_credentials
 from custom_components.moonscreen.moonlight.errors import CannotConnect, SunshineError
+from custom_components.moonscreen.moonlight.pairing import pair_with_pin
 
 from fake_sunshine import FakeSunshine
 
@@ -63,6 +65,38 @@ async def test_launch_while_another_app_runs(paired_client: SunshineClient, fake
 
     assert exc_info.value.status_code == 400
     assert "already running" in str(exc_info.value)
+
+
+async def test_async_create_client(fake_sunshine: FakeSunshine) -> None:
+    """The HA setup path creates the client in a worker thread."""
+
+    client_cert, client_key = generate_client_credentials("Async Client Test")
+    result = await pair_with_pin(
+        host="127.0.0.1",
+        http_port=fake_sunshine.http_port,
+        https_port=fake_sunshine.https_port,
+        client_cert_pem=client_cert,
+        client_key_pem=client_key,
+        pin=fake_sunshine.pin,
+        client_unique_id="async-client",
+        pairing_name="Async Client Test",
+    )
+    client = await SunshineClient.async_create(
+        host="127.0.0.1",
+        https_port=fake_sunshine.https_port,
+        http_port=fake_sunshine.http_port,
+        web_port=fake_sunshine.web_port,
+        client_cert_pem=result.client_cert_pem,
+        client_key_pem=result.client_key_pem,
+        server_cert_pem=result.server_cert_pem,
+        client_unique_id=result.client_unique_id,
+        client_name=result.pairing_name,
+    )
+    try:
+        info = await client.async_get_serverinfo()
+        assert info.hostname == "Fake PC"
+    finally:
+        await client.close()
 
 
 async def test_web_sessions(paired_client: SunshineClient, fake_sunshine: FakeSunshine) -> None:
