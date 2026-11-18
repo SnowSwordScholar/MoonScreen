@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2 — 2026-11-18
+
+- Refresh the switch every second after `/launch` or `/cancel` until the host
+  reports the expected state, instead of waiting for the next scheduled poll.
+
 ## 0.1.1 — 2026-11-18
 
 - Fix the switch staying at its setup value until the integration is reloaded:

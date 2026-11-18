@@ -35,6 +35,9 @@ from .moonlight.models import ServerInfo, WebSessions
 _LOGGER = logging.getLogger(__name__)
 
 _APP_CACHE_SECONDS = 300
+_ACTION_CONFIRM_INTERVAL = 1.0
+_OFF_CONFIRM_TIMEOUT = 15.0
+_ON_CONFIRM_TIMEOUT = 20.0
 
 
 @dataclass(slots=True)
@@ -237,7 +240,7 @@ class MoonScreenCoordinator(DataUpdateCoordinator[ScreenState]):
             except SunshineError as err:
                 if err.status_code == 400 and "already running" in err.message.lower():
                     # A client started Desktop between our check and the launch.
-                    await self.async_request_refresh()
+                    await self.async_refresh()
                     if self.data is not None and self.data.app_id == self._desktop_app_id:
                         return
                 raise HomeAssistantError(str(err)) from err
@@ -248,7 +251,8 @@ class MoonScreenCoordinator(DataUpdateCoordinator[ScreenState]):
                 raise HomeAssistantError(f"无法连接 Sunshine：{err}") from err
 
             self._last_launch_at = dt_util.utcnow()
-            await self.async_request_refresh()
+            if not await self._wait_for_screen_state(expected_on=False, timeout=_OFF_CONFIRM_TIMEOUT):
+                raise HomeAssistantError("已发送启动请求，但主机状态未变为 Desktop；请检查 Sunshine 日志")
 
     async def async_turn_on_screen(self) -> None:
         """Ask Sunshine to quit the running app and restore the physical display."""
@@ -279,19 +283,27 @@ class MoonScreenCoordinator(DataUpdateCoordinator[ScreenState]):
                 raise HomeAssistantError(f"无法结束 Desktop：{err}") from err
 
             self._last_cancel_at = dt_util.utcnow()
-            for _ in range(20):
-                await asyncio.sleep(1)
-                try:
-                    current = await self.client.async_get_serverinfo()
-                except (CannotConnect, PairingRequired, SunshineError) as err:
-                    _LOGGER.debug("MoonScreen: polling after cancel failed: %s", err)
-                    break
-                if current.current_app_id <= 0:
-                    break
-            else:
+            if not await self._wait_for_screen_state(expected_on=True, timeout=_ON_CONFIRM_TIMEOUT):
                 raise HomeAssistantError("已发送退出请求，但 Desktop 仍在运行；请检查 Sunshine 日志")
 
-            await self.async_request_refresh()
+    async def _wait_for_screen_state(self, *, expected_on: bool, timeout: float) -> bool:
+        """Refresh every second until the host reports the expected switch state.
+
+        A switch action used to wait for the next scheduled poll (up to 15 s)
+        before the entity changed.  ``async_refresh`` bypasses the coordinator's
+        debouncer and triggers the CoordinatorEntity listener immediately, so the
+        user sees the result of the click within about a second.
+        """
+
+        loop = asyncio.get_running_loop()
+        deadline = loop.time() + timeout
+        while True:
+            await self.async_refresh()
+            if self.data is not None and self.data.screen_on == expected_on:
+                return True
+            if loop.time() >= deadline:
+                return False
+            await asyncio.sleep(_ACTION_CONFIRM_INTERVAL)
 
     async def async_shutdown(self) -> None:
         await super().async_shutdown()
