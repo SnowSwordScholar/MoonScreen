@@ -1,0 +1,81 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "连接 Foundation Sunshine",
+        "description": "输入运行 Sunshine 的 Windows 主机地址。默认分辨率用于关闭屏幕时创建的虚拟屏；之后可在集成选项中修改。",
+        "data": {
+          "host": "主机地址（IP 或主机名）",
+          "https_port": "HTTPS / GameStream 端口",
+          "http_port": "HTTP 端口",
+          "web_port": "Sunshine WebUI 端口",
+          "desktop_app_name": "Desktop 应用名称",
+          "width": "虚拟屏宽度",
+          "height": "虚拟屏高度",
+          "fps": "刷新率（FPS）",
+          "poll_interval": "状态轮询间隔（秒）",
+          "web_username": "Sunshine WebUI 用户名（可选）",
+          "web_password": "Sunshine WebUI 密码（可选）",
+          "protect_active_stream": "有 Moonlight 串流时阻止开屏（可选）"
+        }
+      },
+      "pair_pin": {
+        "title": "在 Sunshine 中输入 PIN",
+        "description": "打开 {web_url}，在 PIN 页面输入 **{pin}**（设备名会显示为 MoonScreen），然后勾选下面的确认框并提交。\n\n如果 PIN 页面没有请求，请等几秒刷新。{vdd_note}",
+        "data": {
+          "confirm": "我已在 Sunshine 的 PIN 页面输入该 PIN"
+        }
+      },
+      "reauth_confirm": {
+        "title": "重新配对 MoonScreen",
+        "description": "Sunshine 不再接受当前客户端证书。将为 {host} 生成新证书，需要在 Sunshine 的 PIN 页面再输入一次 PIN。",
+        "data": {
+          "confirm": "开始重新配对"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "无法连接 Sunshine，请检查主机地址、端口和防火墙。",
+      "invalid_option": "分辨率、帧率或轮询间隔超出允许范围。",
+      "invalid_pin": "PIN 错误或配对已过期，已生成新的 PIN，请重试。",
+      "pairing_failed": "配对失败，请检查 Sunshine 日志后重试。",
+      "pin_not_confirmed": "还没有在 Sunshine 中确认 PIN。输入后请再提交一次。",
+      "confirm_required": "请先勾选确认框。",
+      "unknown": "发生未知错误。"
+    },
+    "abort": {
+      "already_configured": "这台 Sunshine 已经添加过。",
+      "pairing_failed": "配对未能开始，请重试。",
+      "reauth_failed": "找不到要重新配对的集成条目。",
+      "reauth_successful": "重新配对成功。"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "MoonScreen 选项",
+        "description": "修改默认分辨率、Desktop 应用名、轮询间隔，以及可选的 WebUI 凭据。",
+        "data": {
+          "desktop_app_name": "Desktop 应用名称",
+          "width": "虚拟屏宽度",
+          "height": "虚拟屏高度",
+          "fps": "刷新率（FPS）",
+          "poll_interval": "状态轮询间隔（秒）",
+          "web_username": "Sunshine WebUI 用户名（可选）",
+          "web_password": "Sunshine WebUI 密码（可选）",
+          "protect_active_stream": "有 Moonlight 串流时阻止开屏（可选）"
+        }
+      }
+    },
+    "error": {
+      "invalid_option": "分辨率、帧率或轮询间隔超出允许范围。"
+    }
+  },
+  "entity": {
+    "switch": {
+      "screen": {
+        "name": "电脑屏幕"
+      }
+    }
+  }
+}

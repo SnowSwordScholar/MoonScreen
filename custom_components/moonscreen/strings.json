@@ -1,0 +1,81 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to Foundation Sunshine",
+        "description": "Enter the Windows host running Sunshine. The default resolution is used for the virtual display created while the physical screen is off; you can change it later in the integration options.",
+        "data": {
+          "host": "Host (IP or hostname)",
+          "https_port": "HTTPS / GameStream port",
+          "http_port": "HTTP port",
+          "web_port": "Sunshine WebUI port",
+          "desktop_app_name": "Desktop app name",
+          "width": "Virtual display width",
+          "height": "Virtual display height",
+          "fps": "Refresh rate (FPS)",
+          "poll_interval": "Poll interval (seconds)",
+          "web_username": "Sunshine WebUI username (optional)",
+          "web_password": "Sunshine WebUI password (optional)",
+          "protect_active_stream": "Block screen-on while Moonlight is streaming (optional)"
+        }
+      },
+      "pair_pin": {
+        "title": "Enter the PIN in Sunshine",
+        "description": "Open {web_url}, enter **{pin}** on the PIN page (the device will be named MoonScreen), then tick the confirmation below and submit.\n\nIf no request is listed, wait a few seconds and refresh. {vdd_note}",
+        "data": {
+          "confirm": "I entered the PIN in Sunshine"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Re-pair MoonScreen",
+        "description": "Sunshine no longer accepts the current client certificate. A new certificate will be created for {host} and you will need to enter another PIN in Sunshine.",
+        "data": {
+          "confirm": "Start re-pairing"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot reach Sunshine. Check the host, ports and firewall.",
+      "invalid_option": "Resolution, FPS or poll interval is out of range.",
+      "invalid_pin": "Wrong PIN or the pairing expired. A new PIN has been generated; please retry.",
+      "pairing_failed": "Pairing failed. Check the Sunshine log and try again.",
+      "pin_not_confirmed": "The PIN has not been confirmed in Sunshine yet. Enter it and submit again.",
+      "confirm_required": "Please tick the confirmation box first.",
+      "unknown": "Unknown error."
+    },
+    "abort": {
+      "already_configured": "This Sunshine host is already configured.",
+      "pairing_failed": "Pairing could not be started. Please retry.",
+      "reauth_failed": "The config entry to re-pair could not be found.",
+      "reauth_successful": "Re-pairing succeeded."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "MoonScreen options",
+        "description": "Change the default resolution, Desktop app name, poll interval and optional WebUI credentials.",
+        "data": {
+          "desktop_app_name": "Desktop app name",
+          "width": "Virtual display width",
+          "height": "Virtual display height",
+          "fps": "Refresh rate (FPS)",
+          "poll_interval": "Poll interval (seconds)",
+          "web_username": "Sunshine WebUI username (optional)",
+          "web_password": "Sunshine WebUI password (optional)",
+          "protect_active_stream": "Block screen-on while Moonlight is streaming (optional)"
+        }
+      }
+    },
+    "error": {
+      "invalid_option": "Resolution, FPS or poll interval is out of range."
+    }
+  },
+  "entity": {
+    "switch": {
+      "screen": {
+        "name": "Computer Screen"
+      }
+    }
+  }
+}

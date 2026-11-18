@@ -1,0 +1,13 @@
+{
+  "domain": "moonscreen",
+  "name": "MoonScreen",
+  "codeowners": [],
+  "config_flow": true,
+  "documentation": "https://github.com/AlkaidLab/foundation-sunshine",
+  "integration_type": "hub",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/AlkaidLab/foundation-sunshine/issues",
+  "loggers": ["custom_components.moonscreen"],
+  "requirements": [],
+  "version": "0.1.0"
+}

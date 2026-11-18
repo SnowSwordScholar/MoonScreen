@@ -1,0 +1,11 @@
+# Changelog
+
+## 0.1.0
+
+- Initial MoonScreen integration.
+- Moonlight PIN pairing (four phases, AES-128-ECB without padding, RSA PKCS#1 v1.5).
+- Pinned server certificate and mutual TLS for `/serverinfo`, `/applist`, `/launch`, `/cancel`.
+- `switch.电脑屏幕`: OFF starts Desktop with `useVdd=1` and the configured `mode`; ON calls `/cancel`.
+- State polling via `/serverinfo`, optional Web UI session list and active-stream guard.
+- Options for resolution/FPS, Desktop app name, poll interval, Web UI credentials.
+- Diagnostics redaction, fake Sunshine test double, protocol documentation and live check tool.
